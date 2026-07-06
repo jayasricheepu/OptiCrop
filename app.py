@@ -1,14 +1,19 @@
 from flask import Flask, render_template, request
 import joblib
 import pandas as pd
+import os
 
 app = Flask(__name__)
 
-model = joblib.load("models/crop_model.pkl")
+# Load the trained model
+model_path = os.path.join("models", "crop_model.pkl")
+model = joblib.load(model_path)
+
 
 @app.route("/")
 def home():
     return render_template("index.html")
+
 
 @app.route("/predict", methods=["POST"])
 def predict():
@@ -34,5 +39,6 @@ def predict():
 
     return render_template("index.html", prediction=prediction)
 
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)
